@@ -1,1 +1,91 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinTrack Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root { --primary: #6366f1; --success: #10b981; --danger: #ef4444; --dark: #1f2937; --light: #f9fafb; --gray: #6b7280; --border: #e5e7eb; --radius: 16px; --shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f5f7fa, #c3cfe2); color: var(--dark); min-height: 100vh; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
+        header { text-align: center; margin-bottom: 2rem; }
+        .header-title { font-size: 2.5rem; font-weight: 700; background: linear-gradient(90deg, var(--primary), #8b5cf6); -webkit-background-clip: text; color: transparent; }
+        .current-date { display: inline-flex; align-items: center; gap: 0.5rem; background: white; padding: 0.5rem 1rem; border-radius: var(--radius); box-shadow: var(--shadow); color: var(--primary); font-weight: 600; margin-top: 1rem; }
+        .nav { display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2rem; }
+        .nav-btn { padding: 0.75rem 1.25rem; background: white; border: none; border-radius: var(--radius); font-weight: 600; color: var(--gray); cursor: pointer; box-shadow: var(--shadow); transition: all 0.3s; }
+        .nav-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 15px rgba(0,0,0,0.1); color: var(--primary); }
+        .nav-btn.active { background: var(--primary); color: white; }
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        .stat-card { background: white; border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); position: relative; overflow: hidden; }
+        .stat-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--primary); }
+        .stat-card.success::before { background: var(--success); }
+        .stat-card.danger::before { background: var(--danger); }
+        .stat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; }
+        .stat-icon.primary { background: var(--primary); }
+        .stat-icon.success { background: var(--success); }
+        .stat-icon.danger { background: var(--danger); }
+        .stat-title { font-size: 0.95rem; font-weight: 600; color: var(--gray); text-transform: uppercase; }
+        .stat-value { font-size: 2rem; font-weight: 700; color: var(--dark); }
+        .stat-value.positive { color: var(--success); }
+        .stat-value.negative { color: var(--danger); }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="header-title">FinTrack Pro</h1>
+            <p style="color: var(--gray);">Moliyangizni nazorat qiling</p>
+            <div class="current-date">
+                <i class="fas fa-calendar-alt"></i>
+                <span id="currentDate"></span>
+            </div>
+        </header>
 
+        <nav class="nav">
+            <button class="nav-btn active" onclick="showSection('dashboard')">Dashboard</button>
+            <button class="nav-btn" onclick="showSection('expenses')">Harajatlar</button>
+            <button class="nav-btn" onclick="showSection('income')">Daromadlar</button>
+        </nav>
+
+        <section id="dashboard">
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <div class="stat-icon primary"><i class="fas fa-wallet"></i></div>
+                        <div class="stat-title">Joriy Balans</div>
+                    </div>
+                    <div class="stat-value" id="balance">0 so'm</div>
+                </div>
+                <div class="stat-card success">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <div class="stat-icon success"><i class="fas fa-arrow-trend-up"></i></div>
+                        <div class="stat-title">Bu Oy Daromad</div>
+                    </div>
+                    <div class="stat-value positive" id="monthlyIncome">0 so'm</div>
+                </div>
+                <div class="stat-card danger">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <div class="stat-icon danger"><i class="fas fa-arrow-trend-down"></i></div>
+                        <div class="stat-title">Bu Oy Harajat</div>
+                    </div>
+                    <div class="stat-value negative" id="monthlyExpense">0 so'm</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('uz-UZ', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        function showSection(id) {
+            document.querySelectorAll('section').forEach(s => s.style.display = 'none');
+            document.getElementById(id).style.display = 'block';
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
