@@ -3,89 +3,1224 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinTrack Pro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>FinTrack Pro - Moliya Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        :root { --primary: #6366f1; --success: #10b981; --danger: #ef4444; --dark: #1f2937; --light: #f9fafb; --gray: #6b7280; --border: #e5e7eb; --radius: 16px; --shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f5f7fa, #c3cfe2); color: var(--dark); min-height: 100vh; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
-        header { text-align: center; margin-bottom: 2rem; }
-        .header-title { font-size: 2.5rem; font-weight: 700; background: linear-gradient(90deg, var(--primary), #8b5cf6); -webkit-background-clip: text; color: transparent; }
-        .current-date { display: inline-flex; align-items: center; gap: 0.5rem; background: white; padding: 0.5rem 1rem; border-radius: var(--radius); box-shadow: var(--shadow); color: var(--primary); font-weight: 600; margin-top: 1rem; }
-        .nav { display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2rem; }
-        .nav-btn { padding: 0.75rem 1.25rem; background: white; border: none; border-radius: var(--radius); font-weight: 600; color: var(--gray); cursor: pointer; box-shadow: var(--shadow); transition: all 0.3s; }
-        .nav-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 15px rgba(0,0,0,0.1); color: var(--primary); }
-        .nav-btn.active { background: var(--primary); color: white; }
-        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-        .stat-card { background: white; border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); position: relative; overflow: hidden; }
-        .stat-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--primary); }
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --gray: #6b7280;
+            --border: #e5e7eb;
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --radius: 12px;
+            --radius-lg: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem 0;
+        }
+
+        .header-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-subtitle {
+            color: var(--gray);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .current-date {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            font-weight: 600;
+            color: var(--primary);
+            margin-top: 1rem;
+        }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            padding: 0 1rem;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: white;
+            border: none;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            min-width: 140px;
+            justify-content: center;
+        }
+
+        .nav-btn i {
+            font-size: 1.1rem;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            color: var(--primary);
+        }
+
+        .nav-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .nav-btn.active:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary);
+        }
+
         .stat-card.success::before { background: var(--success); }
         .stat-card.danger::before { background: var(--danger); }
-        .stat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; }
+        .stat-card.warning::before { background: var(--warning); }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
         .stat-icon.primary { background: var(--primary); }
         .stat-icon.success { background: var(--success); }
         .stat-icon.danger { background: var(--danger); }
-        .stat-title { font-size: 0.95rem; font-weight: 600; color: var(--gray); text-transform: uppercase; }
-        .stat-value { font-size: 2rem; font-weight: 700; color: var(--dark); }
-        .stat-value.positive { color: var(--success); }
-        .stat-value.negative { color: var(--danger); }
-        .hidden { display: none; }
+        .stat-icon.warning { background: var(--warning); }
+
+        .stat-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-change {
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .stat-change.positive { color: var(--success); }
+        .stat-change.negative { color: var(--danger); }
+
+        /* Form Sections */
+        .form-section {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title i {
+            color: var(--primary);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        select.form-control {
+            cursor: pointer;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        .table th {
+            background: #f8fafc;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.95rem;
+        }
+
+        .table tr:hover {
+            background: #f8fafc;
+        }
+
+        .table .amount {
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-food { background: #fef3c7; color: #d97706; }
+        .badge-transports { background: #dbeafe; color: #4338ca; }
+        .badge-educations { background: #d1fae5; color: #065f46; }
+        .badge-phone { background: #fee2e2; color: #991b1b; }
+        .badge-relaxing { background: #f3e8ff; color: #7c3aed; }
+        .badge-medicina { background: #fecaca; color: #991b1b; }
+        .badge-clothes { background: #e0e7ff; color: #3730a3; }
+        .badge-lend { background: #fce7f3; color: #be185d; }
+        .badge-other { background: #f3f4f6; color: #374151; }
+
+        .badge-return { background: #d1fae5; color: #065f46; }
+        .badge-card { background: #dbeafe; color: #4338ca; }
+        .badge-naqd { background: #fef3c7; color: #d97706; }
+
+        .badge-debt-me { background: #fecaca; color: #991b1b; }
+        .badge-debt-other { background: #d1fae5; color: #065f46; }
+
+        /* Report Section */
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .report-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .report-card h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .category-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .category-item:last-child {
+            border-bottom: none;
+        }
+
+        .category-name {
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .category-amount {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            .header-title { font-size: 2rem; }
+            .nav { gap: 0.5rem; }
+            .nav-btn { padding: 0.65rem 1rem; font-size: 0.875rem; min-width: auto; }
+            .form-grid { grid-template-columns: 1fr; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 480px) {
+            .stat-value { font-size: 1.5rem; }
+            .form-section { padding: 1rem; }
+            .table-container { margin: 0 -1rem; border-radius: 0; }
+            .table th, .table td { padding: 0.75rem 0.5rem; font-size: 0.875rem; }
+        }
+
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Header -->
         <header>
             <h1 class="header-title">FinTrack Pro</h1>
-            <p style="color: var(--gray);">Moliyangizni nazorat qiling</p>
+            <p class="header-subtitle">Moliyangizni to'liq nazorat qiling</p>
             <div class="current-date">
                 <i class="fas fa-calendar-alt"></i>
                 <span id="currentDate"></span>
             </div>
         </header>
 
+        <!-- Navigation -->
         <nav class="nav">
-            <button class="nav-btn active" onclick="showSection('dashboard')">Dashboard</button>
-            <button class="nav-btn" onclick="showSection('expenses')">Harajatlar</button>
-            <button class="nav-btn" onclick="showSection('income')">Daromadlar</button>
+            <button class="nav-btn active" onclick="showSection('dashboard')">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </button>
+            <button class="nav-btn" onclick="showSection('expenses')">
+                <i class="fas fa-shopping-cart"></i> Harajatlar
+            </button>
+            <button class="nav-btn" onclick="showSection('income')">
+                <i class="fas fa-wallet"></i> Daromadlar
+            </button>
+            <button class="nav-btn" onclick="showSection('debts')">
+                <i class="fas fa-handshake"></i> Qarzlar
+            </button>
+            <button class="nav-btn" onclick="showSection('savings')">
+                <i class="fas fa-piggy-bank"></i> Tejamkorlik
+            </button>
+            <button class="nav-btn" onclick="showSection('report')">
+                <i class="fas fa-chart-pie"></i> Hisobot
+            </button>
         </nav>
 
-        <section id="dashboard">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section">
             <div class="dashboard-grid">
                 <div class="stat-card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                        <div class="stat-icon primary"><i class="fas fa-wallet"></i></div>
+                    <div class="stat-header">
+                        <div class="stat-icon primary">
+                            <i class="fas fa-wallet"></i>
+                        </div>
                         <div class="stat-title">Joriy Balans</div>
                     </div>
                     <div class="stat-value" id="balance">0 so'm</div>
+                    <div class="stat-change" id="balanceChange">
+                        <i class="fas fa-arrow-up"></i> 12% o'tgan oydan
+                    </div>
                 </div>
+
                 <div class="stat-card success">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                        <div class="stat-icon success"><i class="fas fa-arrow-trend-up"></i></div>
+                    <div class="stat-header">
+                        <div class="stat-icon success">
+                            <i class="fas fa-arrow-trend-up"></i>
+                        </div>
                         <div class="stat-title">Bu Oy Daromad</div>
                     </div>
                     <div class="stat-value positive" id="monthlyIncome">0 so'm</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> 8% o'tgan oydan
+                    </div>
                 </div>
+
                 <div class="stat-card danger">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                        <div class="stat-icon danger"><i class="fas fa-arrow-trend-down"></i></div>
+                    <div class="stat-header">
+                        <div class="stat-icon danger">
+                            <i class="fas fa-arrow-trend-down"></i>
+                        </div>
                         <div class="stat-title">Bu Oy Harajat</div>
                     </div>
                     <div class="stat-value negative" id="monthlyExpense">0 so'm</div>
+                    <div class="stat-change negative">
+                        <i class="fas fa-arrow-down"></i> 3% o'tgan oydan
+                    </div>
+                </div>
+
+                <div class="stat-card warning">
+                    <div class="stat-header">
+                        <div class="stat-icon warning">
+                            <i class="fas fa-piggy-bank"></i>
+                        </div>
+                        <div class="stat-title">Tegmas Pul</div>
+                    </div>
+                    <div class="stat-value positive" id="savingsTotal">0 so'm</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> 15% o'tgan oydan
+                    </div>
+                </div>
+
+                <div class="stat-card danger">
+                    <div class="stat-header">
+                        <div class="stat-icon danger">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-title">Qarzim Bor</div>
+                    </div>
+                    <div class="stat-value negative" id="myDebts">0 so'm</div>
+                    <div class="stat-change negative">
+                        <i class="fas fa-arrow-down"></i> 5% kamaydi
+                    </div>
+                </div>
+
+                <div class="stat-card success">
+                    <div class="stat-header">
+                        <div class="stat-icon success">
+                            <i class="fas fa-hand-holding-dollar"></i>
+                        </div>
+                        <div class="stat-title">Menda Qarz Bor</div>
+                    </div>
+                    <div class="stat-value positive" id="othersDebts">0 so'm</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> 10% oshdi
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expenses Section -->
+        <section id="expenses" class="section hidden">
+            <div class="form-section">
+                <h2 class="section-title">
+                    <i class="fas fa-plus-circle"></i> Yangi Harajat Qo'shish
+                </h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Sana</label>
+                        <input type="date" id="expDate" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Kategoriya</label>
+                        <select id="expCategory" class="form-control" required>
+                            <option value="">Tanlang</option>
+                            <option value="Food">Oziq-ovqat</option>
+                            <option value="Transports">Transport</option>
+                            <option value="Educations">Ta'lim</option>
+                            <option value="Phone">Telefon</option>
+                            <option value="Relaxing">Dam olish</option>
+                            <option value="Medicina">Tibbiyot</option>
+                            <option value="Clothes">Kiyim-kechak</option>
+                            <option value="Lend">Qarz berish</option>
+                            <option value="Other">Boshqa</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Summa</label>
+                        <input type="number" id="expAmount" class="form-control" placeholder="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Izoh</label>
+                        <input type="text" id="expNote" class="form-control" placeholder="Masalan: Non va sut">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Kim uchun</label>
+                        <select id="expFor" class="form-control">
+                            <option value="">Tanlang</option>
+                            <option value="Oila">Oila</option>
+                            <option value="O'zim">O'zim</option>
+                            <option value="Do'st">Do'st</option>
+                            <option value="Biznes">Biznes</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: end;">
+                        <button class="btn btn-primary" onclick="addExpense()">
+                            <i class="fas fa-plus"></i> Qo'shish
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="table" id="expensesTable">
+                    <thead>
+                        <tr>
+                            <th>Sana</th>
+                            <th>Kategoriya</th>
+                            <th>Summa</th>
+                            <th>Izoh</th>
+                            <th>Kim uchun</th>
+                            <th>Harakat</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Income Section -->
+        <section id="income" class="section hidden">
+            <div class="form-section">
+                <h2 class="section-title">
+                    <i class="fas fa-plus-circle"></i> Yangi Daromad Qo'shish
+                </h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Sana</label>
+                        <input type="date" id="incDate" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Manba</label>
+                        <select id="incSource" class="form-control" required>
+                            <option value="">Tanlang</option>
+                            <option value="Return">Qaytarilgan pul</option>
+                            <option value="Card">Karta orqali</option>
+                            <option value="Naqd">Naqd pul</option>
+                            <option value="Bonus">Bonus</option>
+                            <option value="Boshqa">Boshqa</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Summa</label>
+                        <input type="number" id="incAmount" class="form-control" placeholder="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Izoh</label>
+                        <input type="text" id="incNote" class="form-control" placeholder="Masalan: Mijoz to'lovi">
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: end;">
+                        <button class="btn btn-primary" onclick="addIncome()">
+                            <i class="fas fa-plus"></i> Qo'shish
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="table" id="incomeTable">
+                    <thead>
+                        <tr>
+                            <th>Sana</th>
+                            <th>Manba</th>
+                            <th>Summa</th>
+                            <th>Izoh</th>
+                            <th>Harakat</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Debts Section -->
+        <section id="debts" class="section hidden">
+            <div class="form-section">
+                <h2 class="section-title">
+                    <i class="fas fa-plus-circle"></i> Yangi Qarz Qo'shish
+                </h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Sana</label>
+                        <input type="date" id="debtDate" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Turi</label>
+                        <select id="debtType" class="form-control" required>
+                            <option value="">Tanlang</option>
+                            <option value="Menga qarz">Menga qarz</option>
+                            <option value="Men qarz berdim">Men qarz berdim</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Qarz summasi</label>
+                        <input type="number" id="debtAmount" class="form-control" placeholder="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Qaytarilgan</label>
+                        <input type="number" id="debtReturned" class="form-control" placeholder="0" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Izoh</label>
+                        <input type="text" id="debtNote" class="form-control" placeholder="Masalan: Do'stimdan">
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: end;">
+                        <button class="btn btn-primary" onclick="addDebt()">
+                            <i class="fas fa-plus"></i> Qo'shish
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="table" id="debtsTable">
+                    <thead>
+                        <tr>
+                            <th>Sana</th>
+                            <th>Turi</th>
+                            <th>Qarz</th>
+                            <th>Qaytarilgan</th>
+                            <th>Qoldiq</th>
+                            <th>Izoh</th>
+                            <th>Harakat</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Savings Section -->
+        <section id="savings" class="section hidden">
+            <div class="form-section">
+                <h2 class="section-title">
+                    <i class="fas fa-plus-circle"></i> Yangi Tejamkorlik Qo'shish
+                </h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Sana</label>
+                        <input type="date" id="savDate" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Maqsad</label>
+                        <input type="text" id="savGoal" class="form-control" placeholder="Masalan: Yangi mashina" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Summa</label>
+                        <input type="number" id="savAmount" class="form-control" placeholder="0" required>
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: end;">
+                        <button class="btn btn-primary" onclick="addSaving()">
+                            <i class="fas fa-plus"></i> Qo'shish
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="table" id="savingsTable">
+                    <thead>
+                        <tr>
+                            <th>Sana</th>
+                            <th>Maqsad</th>
+                            <th>Summa</th>
+                            <th>Harakat</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Report Section -->
+        <section id="report" class="section hidden">
+            <div class="form-section">
+                <h2 class="section-title">
+                    <i class="fas fa-chart-pie"></i> Oylik Hisobot
+                </h2>
+                <div class="report-grid">
+                    <div class="report-card">
+                        <h3>Kategoriyalar bo'yicha Harajatlar</h3>
+                        <div id="expensesByCategory"></div>
+                    </div>
+                    <div class="report-card">
+                        <h3>Daromad Manbalari</h3>
+                        <div id="incomeBySource"></div>
+                    </div>
+                    <div class="report-card">
+                        <h3>Qarz Holati</h3>
+                        <div id="debtStatus"></div>
+                    </div>
+                    <div class="report-card">
+                        <h3>Tejamkorlik Maqsadlari</h3>
+                        <div id="savingsGoals"></div>
+                    </div>
                 </div>
             </div>
         </section>
     </div>
 
     <script>
-        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('uz-UZ', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-        function showSection(id) {
-            document.querySelectorAll('section').forEach(s => s.style.display = 'none');
-            document.getElementById(id).style.display = 'block';
+        // Ma'lumotlar
+        let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+        let incomes = JSON.parse(localStorage.getItem('incomes')) || [];
+        let debts = JSON.parse(localStorage.getItem('debts')) || [];
+        let savings = JSON.parse(localStorage.getItem('savings')) || [];
+
+        // Sana
+        const today = new Date();
+        document.getElementById('currentDate').textContent = today.toLocaleDateString('uz-UZ', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        // Form sanalari
+        ['expDate', 'incDate', 'debtDate', 'savDate'].forEach(id => {
+            document.getElementById(id).valueAsDate = today;
+        });
+
+        // Bo'lim ko'rsatish
+        function showSection(section) {
+            document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+            document.getElementById(section).classList.remove('hidden');
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
+            event.target.closest('.nav-btn').classList.add('active');
+            
+            if (section === 'dashboard' || section === 'report') {
+                updateDashboard();
+            }
         }
+
+        // Dashboard yangilash
+        function updateDashboard() {
+            const totalIncome = incomes.reduce((sum, i) => sum + parseFloat(i.amount), 0);
+            const totalExpense = expenses.reduce((sum, e) => sum + parseFloat(e.amount), 0);
+            
+            // Qarz hisoblash
+            const myDebtTotal = debts
+                .filter(d => d.type === "Menga qarz")
+                .reduce((sum, d) => sum + (parseFloat(d.amount) - parseFloat(d.returned || 0)), 0);
+            
+            const othersDebtTotal = debts
+                .filter(d => d.type === "Men qarz berdim")
+                .reduce((sum, d) => sum + (parseFloat(d.amount) - parseFloat(d.returned || 0)), 0);
+            
+            const balance = totalIncome - totalExpense - myDebtTotal + othersDebtTotal;
+            
+            // Bu oy
+            const currentMonth = today.getMonth();
+            const currentYear = today.getFullYear();
+            
+            const monthlyIncome = incomes
+                .filter(i => {
+                    const date = new Date(i.date);
+                    return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
+                })
+                .reduce((sum, i) => sum + parseFloat(i.amount), 0);
+                
+            const monthlyExpense = expenses
+                .filter(e => {
+                    const date = new Date(e.date);
+                    return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
+                })
+                .reduce((sum, e) => sum + parseFloat(e.amount), 0);
+            
+            const savingsTotal = savings.reduce((sum, s) => sum + parseFloat(s.amount), 0);
+
+            // Qiymatlarni formatlash
+            const format = (num) => num.toLocaleString('uz-UZ') + ' so\'m';
+
+            document.getElementById('balance').textContent = format(balance);
+            document.getElementById('balance').className = balance >= 0 ? 'stat-value positive' : 'stat-value negative';
+            
+            document.getElementById('monthlyIncome').textContent = format(monthlyIncome);
+            document.getElementById('monthlyExpense').textContent = format(monthlyExpense);
+            document.getElementById('savingsTotal').textContent = format(savingsTotal);
+            document.getElementById('myDebts').textContent = format(myDebtTotal);
+            document.getElementById('othersDebts').textContent = format(othersDebtTotal);
+
+            // Hisobot
+            if (document.getElementById('report').classList.contains('hidden') === false) {
+                generateReport();
+            }
+        }
+
+        // Hisobot yaratish
+        function generateReport() {
+            const currentMonth = today.getMonth();
+            const currentYear = today.getFullYear();
+
+            // Harajatlar kategoriyasi bo'yicha
+            const expensesByCat = {};
+            expenses
+                .filter(e => {
+                    const date = new Date(e.date);
+                    return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
+                })
+                .forEach(e => {
+                    expensesByCat[e.category] = (expensesByCat[e.category] || 0) + parseFloat(e.amount);
+                });
+
+            const expensesHtml = Object.entries(expensesByCat)
+                .sort((a, b) => b[1] - a[1])
+                .map(([cat, amt]) => `
+                    <div class="category-item">
+                        <div class="category-name">
+                            <span class="badge badge-${cat.toLowerCase()}">${getCategoryName(cat)}</span>
+                        </div>
+                        <div class="category-amount">${amt.toLocaleString()} so'm</div>
+                    </div>
+                `).join('');
+            
+            document.getElementById('expensesByCategory').innerHTML = expensesHtml || '<p style="color: #9ca3af; text-align: center; padding: 1rem;">Ma\'lumot yo\'q</p>';
+
+            // Daromad manbalari
+            const incomeBySource = {};
+            incomes
+                .filter(i => {
+                    const date = new Date(i.date);
+                    return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
+                })
+                .forEach(i => {
+                    incomeBySource[i.source] = (incomeBySource[i.source] || 0) + parseFloat(i.amount);
+                });
+
+            const incomeHtml = Object.entries(incomeBySource)
+                .sort((a, b) => b[1] - a[1])
+                .map(([src, amt]) => `
+                    <div class="category-item">
+                        <div class="category-name">
+                            <span class="badge badge-${src.toLowerCase()}">${getSourceName(src)}</span>
+                        </div>
+                        <div class="category-amount">${amt.toLocaleString()} so'm</div>
+                    </div>
+                `).join('');
+            
+            document.getElementById('incomeBySource').innerHTML = incomeHtml || '<p style="color: #9ca3af; text-align: center; padding: 1rem;">Ma\'lumot yo\'q</p>';
+
+            // Qarz holati
+            const myDebts = debts.filter(d => d.type === "Menga qarz");
+            const othersDebts = debts.filter(d => d.type === "Men qarz berdim");
+
+            const debtHtml = `
+                <div class="category-item">
+                    <div class="category-name">
+                        <span class="badge badge-debt-me">Menga qarz</span>
+                    </div>
+                    <div class="category-amount">${myDebts.reduce((s, d) => s + (parseFloat(d.amount) - parseFloat(d.returned || 0)), 0).toLocaleString()} so'm</div>
+                </div>
+                <div class="category-item">
+                    <div class="category-name">
+                        <span class="badge badge-debt-other">Men qarz berdim</span>
+                    </div>
+                    <div class="category-amount">${othersDebts.reduce((s, d) => s + (parseFloat(d.amount) - parseFloat(d.returned || 0)), 0).toLocaleString()} so'm</div>
+                </div>
+            `;
+            
+            document.getElementById('debtStatus').innerHTML = debtHtml;
+
+            // Tejamkorlik
+            const savingsHtml = savings
+                .sort((a, b) => parseFloat(b.amount) - parseFloat(a.amount))
+                .map(s => `
+                    <div class="category-item">
+                        <div class="category-name">${s.goal}</div>
+                        <div class="category-amount">${parseFloat(s.amount).toLocaleString()} so'm</div>
+                    </div>
+                `).join('');
+            
+            document.getElementById('savingsGoals').innerHTML = savingsHtml || '<p style="color: #9ca3af; text-align: center; padding: 1rem;">Ma\'lumot yo\'q</p>';
+        }
+
+        // Nomlarni o'zbekchaga o'tkazish
+        function getCategoryName(cat) {
+            const names = {
+                'Food': 'Oziq-ovqat',
+                'Transports': 'Transport',
+                'Educations': 'Ta\'lim',
+                'Phone': 'Telefon',
+                'Relaxing': 'Dam olish',
+                'Medicina': 'Tibbiyot',
+                'Clothes': 'Kiyim-kechak',
+                'Lend': 'Qarz berish',
+                'Other': 'Boshqa'
+            };
+            return names[cat] || cat;
+        }
+
+        function getSourceName(src) {
+            const names = {
+                'Return': 'Qaytarilgan',
+                'Card': 'Karta',
+                'Naqd': 'Naqd pul',
+                'Bonus': 'Bonus',
+                'Boshqa': 'Boshqa'
+            };
+            return names[src] || src;
+        }
+
+        // Harajat qo'shish
+        function addExpense() {
+            const data = {
+                date: document.getElementById('expDate').value,
+                category: document.getElementById('expCategory').value,
+                amount: document.getElementById('expAmount').value,
+                note: document.getElementById('expNote').value,
+                for: document.getElementById('expFor').value
+            };
+            
+            if (!data.date || !data.category || !data.amount) {
+                alert('Iltimos, barcha majburiy maydonlarni to\'ldiring!');
+                return;
+            }
+            
+            expenses.push(data);
+            localStorage.setItem('expenses', JSON.stringify(expenses));
+            renderExpenses();
+            clearForm(['expDate', 'expCategory', 'expAmount', 'expNote', 'expFor']);
+            updateDashboard();
+        }
+
+        // Daromad qo'shish
+        function addIncome() {
+            const data = {
+                date: document.getElementById('incDate').value,
+                source: document.getElementById('incSource').value,
+                amount: document.getElementById('incAmount').value,
+                note: document.getElementById('incNote').value
+            };
+            
+            if (!data.date || !data.source || !data.amount) {
+                alert('Iltimos, barcha majburiy maydonlarni to\'ldiring!');
+                return;
+            }
+            
+            incomes.push(data);
+            localStorage.setItem('incomes', JSON.stringify(incomes));
+            renderIncomes();
+            clearForm(['incDate', 'incSource', 'incAmount', 'incNote']);
+            updateDashboard();
+        }
+
+        // Qarz qo'shish
+        function addDebt() {
+            const data = {
+                date: document.getElementById('debtDate').value,
+                type: document.getElementById('debtType').value,
+                amount: document.getElementById('debtAmount').value,
+                returned: document.getElementById('debtReturned').value || '0',
+                note: document.getElementById('debtNote').value
+            };
+            
+            if (!data.date || !data.type || !data.amount) {
+                alert('Iltimos, barcha majburiy maydonlarni to\'ldiring!');
+                return;
+            }
+            
+            debts.push(data);
+            localStorage.setItem('debts', JSON.stringify(debts));
+            renderDebts();
+            clearForm(['debtDate', 'debtType', 'debtAmount', 'debtReturned', 'debtNote']);
+            updateDashboard();
+        }
+
+        // Tejamkorlik qo'shish
+        function addSaving() {
+            const data = {
+                date: document.getElementById('savDate').value,
+                goal: document.getElementById('savGoal').value,
+                amount: document.getElementById('savAmount').value
+            };
+            
+            if (!data.date || !data.goal || !data.amount) {
+                alert('Iltimos, barcha majburiy maydonlarni to\'ldiring!');
+                return;
+            }
+            
+            savings.push(data);
+            localStorage.setItem('savings', JSON.stringify(savings));
+            renderSavings();
+            clearForm(['savDate', 'savGoal', 'savAmount']);
+            updateDashboard();
+        }
+
+        // Formani tozalash
+        function clearForm(ids) {
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (el.type === 'select-one') {
+                    el.selectedIndex = 0;
+                } else if (el.type === 'date') {
+                    el.valueAsDate = new Date();
+                } else {
+                    el.value = el.type === 'number' ? '' : '';
+                }
+            });
+        }
+
+        // Jadval render qilish
+        function renderExpenses() {
+            const tbody = document.querySelector('#expensesTable tbody');
+            tbody.innerHTML = expenses
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .map((item, index) => `
+                    <tr>
+                        <td>${new Date(item.date).toLocaleDateString('uz-UZ')}</td>
+                        <td><span class="badge badge-${item.category.toLowerCase()}">${getCategoryName(item.category)}</span></td>
+                        <td class="amount">${parseFloat(item.amount).toLocaleString()} so'm</td>
+                        <td>${item.note || '-'}</td>
+                        <td>${item.for || '-'}</td>
+                        <td><button class="btn btn-danger" onclick="deleteExpense(${index})"><i class="fas fa-trash"></i></button></td>
+                    </tr>
+                `).join('');
+        }
+
+        function renderIncomes() {
+            const tbody = document.querySelector('#incomeTable tbody');
+            tbody.innerHTML = incomes
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .map((item, index) => `
+                    <tr>
+                        <td>${new Date(item.date).toLocaleDateString('uz-UZ')}</td>
+                        <td><span class="badge badge-${item.source.toLowerCase()}">${getSourceName(item.source)}</span></td>
+                        <td class="amount">${parseFloat(item.amount).toLocaleString()} so'm</td>
+                        <td>${item.note || '-'}</td>
+                        <td><button class="btn btn-danger" onclick="deleteIncome(${index})"><i class="fas fa-trash"></i></button></td>
+                    </tr>
+                `).join('');
+        }
+
+        function renderDebts() {
+            const tbody = document.querySelector('#debtsTable tbody');
+            tbody.innerHTML = debts
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .map((item, index) => {
+                    const remaining = parseFloat(item.amount) - parseFloat(item.returned || 0);
+                    return `
+                        <tr>
+                            <td>${new Date(item.date).toLocaleDateString('uz-UZ')}</td>
+                            <td><span class="badge ${item.type === 'Menga qarz' ? 'badge-debt-me' : 'badge-debt-other'}">${item.type}</span></td>
+                            <td class="amount">${parseFloat(item.amount).toLocaleString()} so'm</td>
+                            <td class="amount">${parseFloat(item.returned || 0).toLocaleString()} so'm</td>
+                            <td class="amount">${remaining.toLocaleString()} so'm</td>
+                            <td>${item.note || '-'}</td>
+                            <td><button class="btn btn-danger" onclick="deleteDebt(${index})"><i class="fas fa-trash"></i></button></td>
+                        </tr>
+                    `;
+                }).join('');
+        }
+
+        function renderSavings() {
+            const tbody = document.querySelector('#savingsTable tbody');
+            tbody.innerHTML = savings
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .map((item, index) => `
+                    <tr>
+                        <td>${new Date(item.date).toLocaleDateString('uz-UZ')}</td>
+                        <td>${item.goal}</td>
+                        <td class="amount">${parseFloat(item.amount).toLocaleString()} so'm</td>
+                        <td><button class="btn btn-danger" onclick="deleteSaving(${index})"><i class="fas fa-trash"></i></button></td>
+                    </tr>
+                `).join('');
+        }
+
+        // O'chirish funksiyalari
+        function deleteExpense(index) {
+            if (confirm('Bu harajatni o\'chirmoqchimisiz?')) {
+                expenses.splice(index, 1);
+                localStorage.setItem('expenses', JSON.stringify(expenses));
+                renderExpenses();
+                updateDashboard();
+            }
+        }
+
+        function deleteIncome(index) {
+            if (confirm('Bu daromadni o\'chirmoqchimisiz?')) {
+                incomes.splice(index, 1);
+                localStorage.setItem('incomes', JSON.stringify(incomes));
+                renderIncomes();
+                updateDashboard();
+            }
+        }
+
+        function deleteDebt(index) {
+            if (confirm('Bu qarzni o\'chirmoqchimisiz?')) {
+                debts.splice(index, 1);
+                localStorage.setItem('debts', JSON.stringify(debts));
+                renderDebts();
+                updateDashboard();
+            }
+        }
+
+        function deleteSaving(index) {
+            if (confirm('Bu tejamkorlikni o\'chirmoqchimisiz?')) {
+                savings.splice(index, 1);
+                localStorage.setItem('savings', JSON.stringify(savings));
+                renderSavings();
+                updateDashboard();
+            }
+        }
+
+        // Dastlabki yuklash
+        renderExpenses();
+        renderIncomes();
+        renderDebts();
+        renderSavings();
+        updateDashboard();
     </script>
 </body>
 </html>
